@@ -1,0 +1,181 @@
+{
+ "seed": 1127,
+ "predictions": {
+  "ml_f1": {
+   "text": "0.9",
+   "time": "15:43:00"
+  },
+  "ml_lr": {
+   "text": "0.001",
+   "time": "15:43:06"
+  },
+  "dl_curve": {
+   "text": "không, hơn",
+   "time": "15:46:17"
+  },
+  "dl_relu": {
+   "text": "Mạng sẽ có độ chính xác giảm nhưng không đáng kể",
+   "time": "15:50:22"
+  },
+  "emb_search": {
+   "text": "spam",
+   "time": "15:54:35"
+  },
+  "emb_tricky": {
+   "text": "LogReg",
+   "time": "15:57:27"
+  },
+  "llm_models": {
+   "text": "So sánh model lớn và model nhỏ bằng zero-shot trên 40 tin SMS của tập SUB",
+   "time": "16:20:15"
+  },
+  "llm_fewshot": {
+   "text": "So sánh zero-shot và few-shot khi bổ sung 4 ví dụ (2 spam, 2 ham) lấy từ TRAIN vào prompt. Đánh giá F1-score và chi phí trung bình trên mỗi SMS.",
+   "time": "16:26:05"
+  },
+  "tradeoff": {
+   "text": "Dự đoán các phương pháp nằm trên đường Pareto (ít lỗi và latency thấp), đồng thời xác định phương pháp có khả năng vượt SLA 50 ms.",
+   "time": "16:26:48"
+  },
+  "hard_eval": {
+   "text": "60%",
+   "time": "16:27:39"
+  }
+ },
+ "checks": {
+  "1.1 vectorize": true,
+  "1.2 sigmoid / predict_proba": true,
+  "1.3 train_logreg": true,
+  "1.4 metrics": true,
+  "2.1 build_mlp": true,
+  "2.2 train_mlp": true,
+  "3.1–3.2 cosine / top_k_similar": true,
+  "3.3 knn_predict": true,
+  "4.2–4.3 prompt / parse_label": true,
+  "4.1 + 4.4 call_openai / llm_classify_batch": true
+ },
+ "experiments": [
+  {
+   "key": "ml_f1",
+   "time": "15:43:00"
+  },
+  {
+   "key": "ml_lr",
+   "time": "15:43:06"
+  },
+  {
+   "key": "dl_curve",
+   "time": "15:43:58"
+  },
+  {
+   "key": "dl_curve",
+   "time": "15:44:57"
+  },
+  {
+   "key": "dl_curve",
+   "time": "15:46:19"
+  },
+  {
+   "key": "dl_curve",
+   "time": "15:47:15"
+  },
+  {
+   "key": "dl_relu",
+   "time": "15:50:23"
+  },
+  {
+   "key": "emb_search",
+   "time": "15:54:36"
+  },
+  {
+   "key": "emb_tricky",
+   "time": "15:57:29"
+  },
+  {
+   "key": "llm_models",
+   "time": "16:20:17"
+  },
+  {
+   "key": "llm_models",
+   "time": "16:24:03"
+  },
+  {
+   "key": "llm_fewshot",
+   "time": "16:26:06"
+  },
+  {
+   "key": "tradeoff",
+   "time": "16:26:49"
+  },
+  {
+   "key": "hard_eval",
+   "time": "16:27:40"
+  },
+  {
+   "key": "hard_eval",
+   "time": "16:28:03"
+  }
+ ],
+ "results": {
+  "1. BoW + LogReg (tự code)": {
+   "accuracy": 0.984516129032258,
+   "precision": 1.0,
+   "recall": 0.85,
+   "f1": 0.9189189189189189,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 4.8729864639999505,
+   "msg_per_s": 8927.890934040162,
+   "p50_ms": 0.057106000099338416,
+   "p95_ms": 0.12639585000897566,
+   "usd_per_1k": 0.0
+  },
+  "2. BoW + MLP (deep learning)": {
+   "accuracy": 0.984516129032258,
+   "precision": 0.9857142857142858,
+   "recall": 0.8625,
+   "f1": 0.9200000000000002,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 72.74904552199996,
+   "msg_per_s": 44812.17022221266,
+   "p50_ms": 0.16086850007468456,
+   "p95_ms": 0.19984624990456715,
+   "usd_per_1k": 0.0
+  },
+  "3a. Encoder (MiniLM) + kNN": {
+   "accuracy": 0.9729032258064516,
+   "precision": 0.8241758241758241,
+   "recall": 0.9375,
+   "f1": 0.8771929824561403,
+   "f1_SUB": 0.975609756097561,
+   "train_s": 76.46365700899992,
+   "msg_per_s": 32.37555888123642,
+   "p50_ms": 46.47162350011058,
+   "p95_ms": 67.65588505015783,
+   "usd_per_1k": 0.0
+  },
+  "3b. Encoder (MiniLM) + LogReg": {
+   "accuracy": 0.9922580645161291,
+   "precision": 0.9625,
+   "recall": 0.9625,
+   "f1": 0.9625000000000001,
+   "f1_SUB": 1.0,
+   "train_s": 76.87735680800029,
+   "msg_per_s": 51.87833200782987,
+   "p50_ms": 25.558855499866695,
+   "p95_ms": 37.26807374991949,
+   "usd_per_1k": 0.0
+  },
+  "3c. Encoder (MiniLM) + MLP head": {
+   "accuracy": 0.9935483870967742,
+   "precision": 0.9518072289156626,
+   "recall": 0.9875,
+   "f1": 0.9693251533742331,
+   "f1_SUB": 1.0,
+   "train_s": 83.57335445800004,
+   "msg_per_s": 49.23546931679386,
+   "p50_ms": 26.08794350021526,
+   "p95_ms": 36.12697129997286,
+   "usd_per_1k": 0.0
+  }
+ }
+}
